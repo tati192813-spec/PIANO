@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="color-scheme" content="light">
+ <meta name="description" content="Clara: aprende a leer partituras para piano con ejercicios progresivos de clave de sol, clave de fa, dos manos y acordes.">
+ <title>Clara · Aprende a leer partituras de piano</title>
+ <link rel="stylesheet" href="styles.css">
+ <script src="music.js" defer></script>
+ <script src="notation.js" defer></script>
+ <script src="app.js" defer></script>
+ <script src="partituras.js" defer></script>
+ <script src="pdf-recognition.js" defer></script>
+ <script src="pdf-practice.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+ <header class="topbar">
+  <button class="logo" id="logo-home" type="button" aria-label="Volver al inicio"><span class="logo-glyph">𝄞</span><span>clara<span class="accent">.</span><small>lectura de piano</small></span></button>
+  <nav class="main-nav" aria-label="Navegación principal"><button type="button" class="nav-link active" data-go="home">Inicio</button><button type="button" class="nav-link" data-go="pdf">Mis partituras</button><button type="button" class="nav-link" data-go="stats">Mi progreso</button><button type="button" class="nav-link" data-go="guide">Guía</button></nav>
+  <span class="topbar-detail" id="midi-indicator"><span class="led"></span> MIDI sin conectar</span>
+ </header>
+ <main>
+  <section class="screen" id="screen-home" aria-labelledby="home-heading">
+   <div class="hero"><div><p class="eyebrow">TU ENTRENADOR DE LECTURA MUSICAL</p><h1 id="home-heading">Aprende a leer el piano.<br><span class="accent">Nota a nota.</span></h1><p>De reconocer tu primera nota a leer dos pentagramas con naturalidad. Sin presión de tempo: tú marcas el ritmo de aprendizaje.</p><div class="hero-actions"><button type="button" id="resume-home" class="btn subtle hidden">Continuar sesión actual →</button><button class="btn primary" data-mode="treble">Empezar con clave de sol <span aria-hidden="true">→</span></button><button class="btn subtle" data-go="guide">Soy principiante</button></div></div><div class="hero-music" aria-hidden="true"><svg viewBox="0 0 360 170"><g stroke="#ddd9fa" stroke-width="2"><path d="M16 48H342 M16 66H342 M16 84H342 M16 102H342 M16 120H342" /></g><text x="30" y="115" font-size="106" fill="#6b60db">𝄞</text><g fill="#6b60db"><ellipse cx="185" cy="102" rx="12" ry="8" transform="rotate(-15 185 102)"/><ellipse cx="254" cy="84" rx="12" ry="8" transform="rotate(-15 254 84)"/><ellipse cx="314" cy="66" rx="12" ry="8" transform="rotate(-15 314 66)"/></g><path d="M196 102V45 M265 84V30 M325 66V11" stroke="#6b60db" stroke-width="2.5"/></svg><div class="hero-caption">Observa · Identifica · Toca · Repite</div></div></div>
+   <div class="section-heading"><div><p class="eyebrow">ELIGE TU CAMINO</p><h2>Cuatro modos. Un objetivo.</h2></div><span class="muted">Cada modo guarda su nivel y opciones.</span></div>
+   <div class="mode-grid">
+    <button type="button" class="mode-card" data-mode="treble"><span class="mode-number">01 / NOTAS</span><span class="mode-illustration treble-symbol">𝄞</span><strong>Clave de sol</strong><span>Aprende a leer el pentagrama superior, desde Mi4 hasta Do8.</span><span class="mode-bottom"><span id="last-treble">Nivel 1.1</span><b>Entrar →</b></span></button>
+    <button type="button" class="mode-card" data-mode="bass"><span class="mode-number">02 / NOTAS</span><span class="mode-illustration bass-symbol">𝄢</span><strong>Clave de fa</strong><span>Domina el registro grave y amplía tu lectura hasta La0.</span><span class="mode-bottom"><span id="last-bass">Nivel 2.1</span><b>Entrar →</b></span></button>
+    <button type="button" class="mode-card" data-mode="hands"><span class="mode-number">03 / COORDINACIÓN</span><span class="mode-illustration hands-symbol"><span>𝄞</span><span>𝄢</span></span><strong>Dos manos</strong><span>Lee dos pentagramas y toca notas juntas o sucesivas con MIDI.</span><span class="mode-bottom"><span id="last-hands">Nivel 3.1</span><b>Entrar →</b></span></button>
+    <button type="button" class="mode-card" data-mode="chords"><span class="mode-number">04 / ARMONÍA</span><span class="mode-illustration chord-symbol">C<span>maj7</span></span><strong>Acordes</strong><span>Construye acordes, reconoce inversiones y aprende su escritura.</span><span class="mode-bottom"><span id="last-chords">Nivel 4.1</span><b>Entrar →</b></span></button>
+   </div>
+   <div class="pdf-entry"><div><span class="eyebrow">NUEVO · PARTITURAS REALES</span><h3>Practica sobre una partitura original.</h3><p>Importa tus PDF y marca las notas para practicarlas con MIDI. También tienes <strong>Corazón de niño</strong> como ejemplo preparado.</p></div><button type="button" class="btn primary" data-go="pdf">Abrir Mis partituras →</button></div>
+   <div class="feature-line"><span>✓ Sin evaluación del ritmo</span><span>✓ Teclado MIDI o virtual</span><span>✓ Progresión inteligente</span><span>✓ Datos guardados en tu navegador</span></div>
+  </section>
+  <section class="screen hidden" id="screen-setup" aria-labelledby="setup-heading">
+   <div class="page-top"><button type="button" class="back-link" data-go="home">← Todos los modos</button><p class="eyebrow" id="setup-tag">CONFIGURAR ENTRENAMIENTO</p><h1 id="setup-heading">Clave de sol</h1><p class="muted" id="setup-intro"></p></div>
+   <div class="setup-grid">
+    <section class="panel"><div class="panel-top"><div><h2>1. Elige tu nivel</h2><p>Podrás cambiarlo cuando quieras.</p></div><span class="small-tag" id="level-count"></span></div><div class="levels" id="levels"></div><p class="tip" id="level-explanation"></p></section>
+    <section class="panel"><div class="panel-top"><div><h2>2. Personaliza la práctica</h2><p>Opciones independientes para este modo.</p></div></div>
+     <div id="settings-fields" class="settings-fields"></div>
+     <div class="setting-row"><label for="session-limit">Duración de sesión</label><select id="session-limit"><option value="0">Libre · sin límite</option><option value="10">10 ejercicios</option><option value="20">20 ejercicios</option><option value="50">50 ejercicios</option><option value="100">100 ejercicios</option><option value="custom">Personalizada</option></select></div>
+     <div class="setting-row hidden" id="custom-limit-wrap"><label for="custom-limit">Número de ejercicios</label><input type="number" id="custom-limit" min="1" max="1000" value="30"></div>
+     <div class="setting-row switch-setting"><label for="context-help">Mostrar ayuda contextual</label><input type="checkbox" id="context-help" checked></div>
+     <div class="setting-row switch-setting"><label for="smart-repetition">Repetición inteligente</label><input type="checkbox" id="smart-repetition" checked></div>
+     <div class="setup-actions"><div><small id="setup-summary">Preparado para empezar</small><span id="setup-warning" class="warning-text" role="alert"></span></div><button class="btn primary" type="button" id="start-practice">Empezar a practicar →</button></div>
+    </section>
+   </div>
+  </section>
+  <section class="screen hidden" id="screen-practice" aria-labelledby="practice-heading">
+   <div class="practice-heading"><div><button type="button" class="back-link" id="exit-practice">← Configurar nivel</button><p class="eyebrow" id="practice-label">CLAVE DE SOL / NIVEL 1.1</p><h1 id="practice-heading">Lee la siguiente nota</h1><p class="muted" id="practice-explain">No hay límite de tiempo para responder.</p></div><div class="practice-counter"><span id="session-counter">Ejercicio 1</span><strong id="session-percentage">0 %</strong><small>Aciertos al primer intento</small><div class="progress-track"><div id="session-bar" class="progress-fill"></div></div></div></div>
+   <div class="work-area"><div class="work-main">
+    <section class="sheet-card" aria-label="Partitura del ejercicio"><div class="sheet-top"><span class="sheet-title" id="sheet-title">Partitura · 4/4</span><span class="sheet-current" id="sheet-current">Nota 1 de 12</span></div><div id="feedback" class="feedback" role="status" aria-live="polite"></div><div id="chord-prompt" class="chord-prompt hidden"></div><div class="score-scroll" id="score-scroll"><svg id="score" viewBox="0 0 1200 310" role="img" aria-label="Partitura musical"></svg></div><div id="sheet-caption" class="sheet-caption">Las figuras indican escritura musical, no la velocidad de respuesta.</div><div id="solution-strip" class="solution-strip hidden"></div></section>
+    <section class="answer-card"><div class="answer-top"><h2 id="answer-heading">Tu respuesta</h2><span id="input-hint" class="muted">Indica nota y octava.</span></div>
+     <div id="text-answer" class="text-answer"><label class="sr-only" for="answer-input">Respuesta musical</label><input id="answer-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ej.: Do4, Fa#5, Sib3"><button id="check-text" type="button" class="btn primary">Comprobar</button></div>
+     <div id="virtual-answer" class="hidden"><div class="virtual-controls"><span id="virtual-instruction">Pulsa la tecla que ves escrita.</span><div class="button-line"><button type="button" id="keyboard-clear" class="btn small subtle">Limpiar</button><button type="button" id="keyboard-check" class="btn small primary hidden">Comprobar selección</button></div></div><div class="keyboard-scroller" id="keyboard-scroller"><div class="keyboard" id="keyboard" role="group" aria-label="Piano virtual de 88 teclas"></div></div></div>
+     <div id="midi-answer" class="midi-answer hidden"><div class="midi-badge"><span class="led"></span><span id="midi-status">No se ha conectado un piano MIDI.</span></div><button class="btn subtle" id="connect-midi" type="button">Conectar MIDI</button><div class="midi-select-wrap hidden" id="midi-select-wrap"><label for="midi-device">Entrada MIDI</label><select id="midi-device"></select></div><p id="midi-last" class="muted">La detección de MIDI requiere un navegador compatible.</p></div>
+     <div id="answer-secondary" class="answer-secondary"></div>
+     <div class="answer-bottom"><button class="quiet" type="button" id="hint-button">Ver pista</button><div><button class="quiet" type="button" id="skip-button">Saltar ejercicio</button><button class="quiet" type="button" id="pause-button">Pausar</button><button class="quiet end" type="button" id="end-button">Terminar sesión</button></div></div>
+    </section>
+   </div><aside class="practice-aside"><div class="aside-panel"><p class="eyebrow">TU SESIÓN</p><div class="session-metrics"><div><strong id="aside-done">0</strong><span>Completados</span></div><div><strong id="aside-errors">0</strong><span>Errores</span></div><div><strong id="aside-time">00:00</strong><span>Tiempo</span></div></div><div class="aside-target" id="aside-target">Práctica libre</div></div><div class="aside-panel" id="quick-help"><p class="eyebrow">REFERENCIA RÁPIDA</p><h3>Un recordatorio útil</h3><p>En clave de sol, la segunda línea es Sol4. En clave de fa, la cuarta línea es Fa3.</p><button class="text-link" data-go="guide">Consultar guía →</button></div><div class="aside-panel"><p class="eyebrow">DOMINIO DEL NIVEL</p><p id="mastery-status">Acumula respuestas para recibir una recomendación.</p></div></aside></div>
+   <div id="practice-overlay" class="practice-overlay hidden"><div class="overlay-panel"><h2 id="overlay-heading">Sesión en pausa</h2><p id="overlay-description"></p><button id="overlay-primary" class="btn primary">Reanudar</button><button id="overlay-secondary" class="btn subtle hidden">Volver a la configuración</button></div></div>
+  </section>
+  <section class="screen hidden" id="screen-stats" aria-labelledby="stats-heading"><div class="page-top"><p class="eyebrow">MI EVOLUCIÓN</p><h1 id="stats-heading">Tu progreso, nota a nota.</h1><p class="muted">La precisión distingue los aciertos iniciales de las respuestas posteriores a un error o pista.</p></div><div class="stat-grid" id="overall-stats"></div><div class="stats-layout"><section class="panel"><h2>Progreso por modo</h2><div id="by-mode"></div></section><section class="panel"><h2>Notas y acordes para repasar</h2><div id="weak-points"></div></section></div><section class="panel"><h2>Últimas sesiones</h2><div id="recent-sessions"></div></section><section class="panel"><h2>Tus datos</h2><p class="muted">Todo se guarda localmente en este navegador. Exporta una copia antes de borrar o cambiar de equipo.</p><div class="button-line left"><button id="export-data" class="btn subtle">Exportar JSON</button><button id="import-data" class="btn subtle">Importar JSON</button><input type="file" id="import-file" accept="application/json,.json" class="hidden"><button id="clear-data" class="btn danger">Borrar estadísticas</button></div></section></section>
+  <section class="screen hidden" id="screen-guide" aria-labelledby="guide-heading"><div class="page-top"><p class="eyebrow">APRENDE DESDE CERO</p><h1 id="guide-heading">Cómo leer el piano.</h1><p class="muted">Una referencia breve para empezar. Puedes consultarla durante la práctica sin perder tu sesión.</p></div><div class="guide-grid"><article class="panel"><span class="guide-index">01</span><h2>El pentagrama</h2><p>Son cinco líneas y cuatro espacios. Cada posición representa una nota diferente: las posiciones más altas son más agudas.</p><p><strong>Clave de sol:</strong> la segunda línea contando desde abajo es Sol4. <strong>Clave de fa:</strong> la cuarta línea es Fa3.</p></article><article class="panel"><span class="guide-index">02</span><h2>Notas y octavas</h2><p>Las notas son Do, Re, Mi, Fa, Sol, La y Si. Después vuelven a empezar en otra octava: Do4 es el Do central del piano, Do5 está una octava por encima.</p><p>Los números MIDI distinguen los sonidos, pero las notas escritas también conservan su nombre y alteración.</p></article><article class="panel"><span class="guide-index">03</span><h2>Sostenidos, bemoles y becuadros</h2><p>♯ sube un semitono; ♭ baja un semitono; ♮ cancela una alteración. 𝄪 y 𝄫 modifican dos semitonos.</p><p>Las alteraciones accidentales se mantienen en la misma nota y octava hasta finalizar el compás.</p></article><article class="panel"><span class="guide-index">04</span><h2>Cómo practicar</h2><p>La nota actual se distingue por su color violeta. Responde con texto, el piano virtual o un teclado MIDI. Si te equivocas, podrás repetir sin perder tu lugar.</p><p>En esta app las negras, blancas, corcheas y silencios sirven para reconocer notación real: no se te pide tocar con un tempo fijo.</p></article><article class="panel"><span class="guide-index">05</span><h2>Una octava escrita diferente</h2><p><strong>8va</strong> indica que debes tocar una octava más alta de la posición escrita. <strong>8vb</strong> indica una octava más baja. La evaluación siempre usa el sonido real.</p></article><article class="panel"><span class="guide-index">06</span><h2>Elige tu método</h2><p>El piano virtual reproduce las 88 teclas. MIDI permite tocar en un piano real conectado; funciona en navegadores compatibles con Web MIDI, normalmente en un origen seguro (localhost o HTTPS).</p></article></div><div class="guide-actions"><button id="return-practice" class="btn subtle hidden">Volver a mi sesión →</button> <button class="btn primary" data-mode="treble">Ir al nivel 1.1 →</button></div></section>
+
+  <section class="screen hidden" id="screen-pdf" aria-labelledby="pdf-heading">
+   <div class="page-top pdf-page-top"><button class="back-link" type="button" data-go="home">← Volver al inicio</button><p class="eyebrow">MIS PARTITURAS · VISTA ORIGINAL</p><h1 id="pdf-heading">Mis partituras</h1><p class="muted" id="pdf-subtitle">Selecciona una partitura de tu biblioteca para practicar encima de las páginas originales.</p></div>
+   <section class="pdf-library" aria-label="Biblioteca de partituras">
+    <div class="pdf-library-header"><div><strong>Biblioteca</strong><p>Guarda partituras en este navegador y practícalas nota a nota.</p></div><div class="pdf-library-actions"><button type="button" class="btn primary small" id="pdf-import">+ Añadir PDF</button><input type="file" id="pdf-import-file" accept=".pdf,application/pdf,.clara.json,application/json" class="sr-only"><button type="button" class="btn small subtle" id="pdf-export" title="Guardar copia del PDF y las anotaciones">Exportar copia</button></div></div>
+    <div class="pdf-library-list" id="pdf-library-list" aria-label="Partituras disponibles"></div>
+    <p class="pdf-small" id="pdf-library-status" role="status" aria-live="polite">Las partituras se guardan en este navegador. Los PDF nuevos necesitan Internet para cargar el visor; no se envían a ningún servidor.</p>
+   </section>
+   <div class="pdf-layout" id="pdf-layout">
+    <div class="pdf-sheet-stack">
+     <section class="pdf-sheet-panel" aria-label="Página de la partitura">
+     <div class="pdf-toolbar"><div class="pdf-pages"><button type="button" class="btn small subtle" id="pdf-previous-page">← Anterior</button><span id="pdf-page-label">Página 1 de 6</span><button type="button" class="btn small subtle" id="pdf-next-page">Siguiente →</button></div><div class="pdf-page-actions"><button type="button" class="btn small subtle" id="pdf-toggle-sidebar" aria-controls="pdf-sidebar" aria-expanded="true">Ocultar controles</button><label for="pdf-zoom">Zoom</label><select id="pdf-zoom"><option value="0.85">85 %</option><option value="1" selected>100 %</option><option value="1.2">120 %</option><option value="1.5">150 %</option></select></div></div>
+     <div class="pdf-paper-scroll" id="pdf-paper-scroll"><div class="pdf-paper" id="pdf-paper"><img id="pdf-page-image" src="partituras/corazon-de-nino/pagina-1.png" alt="Página 1 de la partitura seleccionada" draggable="false"><svg id="pdf-overlay" role="group" aria-label="Notas interactivas superpuestas"></svg></div></div>
+     <p class="pdf-sheet-caption">Se mantiene el aspecto de cada PDF. Resaltamos solo la cabeza de la nota activa. Los PDF digitales compatibles se analizan automáticamente; revisa las alturas detectadas antes de practicar. Los escaneos requieren marcado manual.</p>
+     </section>
+     <section class="pdf-piano-panel" id="pdf-piano-panel">
+      <div class="pdf-piano-head"><div><strong>Piano virtual · 88 teclas</strong><p class="pdf-small">Las teclas iluminadas indican qué tocar en la selección actual.</p></div><label class="pdf-toggle"><input type="checkbox" id="pdf-show-piano" checked> Mostrar piano</label></div>
+      <div id="pdf-piano-content"><div class="pdf-piano-note-names" id="pdf-piano-note-names" aria-live="polite"></div><div class="pdf-piano-legend" aria-label="Colores por mano"><span><i class="pdf-legend-right"></i> Mano derecha</span><span><i class="pdf-legend-left"></i> Mano izquierda</span><span><i class="pdf-legend-both"></i> Ambas manos</span></div><div class="pdf-keyboard-scroll" id="pdf-keyboard-scroll"><div class="pdf-keyboard" id="pdf-keyboard"></div></div></div>
+     </section>
+    </div>
+    <aside class="pdf-sidebar" id="pdf-sidebar">
+     <section class="pdf-controls-panel"><p class="eyebrow">MODO DE ESTUDIO</p><label class="pdf-label" for="pdf-hand">Qué practicar</label><select id="pdf-hand"><option value="0">Mano derecha</option><option value="1">Mano izquierda</option><option value="both">Ambas manos</option></select>
+      <label class="pdf-toggle"><input type="checkbox" id="pdf-chords"> Acordes simultáneos (beta)</label><label class="pdf-toggle"><input type="checkbox" id="pdf-show-names" checked> Mostrar nombres de las notas</label>
+      <div class="pdf-progress"><span id="pdf-note-position">Nota 1 de —</span></div>
+      <p class="sr-only" id="pdf-feedback" aria-live="polite">Toca en tu piano MIDI o usa las teclas virtuales.</p>
+      <div class="pdf-control-buttons"><button type="button" class="btn small subtle" id="pdf-prev-note">← Nota anterior</button><button type="button" class="btn small subtle" id="pdf-next-note">Saltar →</button></div>
+      <button type="button" class="btn primary pdf-midi-button" id="pdf-connect-midi">Conectar piano MIDI</button><p class="pdf-midi-state" id="pdf-midi-state">Puedes practicar con el piano virtual sin conectar MIDI.</p>
+     </section>
+     <details class="pdf-controls-panel pdf-edit-details" id="pdf-mark-panel">
+      <summary>Reconocimiento y corrección de notas</summary>
+      <p class="pdf-small">Edita las notas de la selección actual. Comprueba siempre octavas, alteraciones y manos; el reconocimiento de PDF sigue siendo experimental.</p>
+      <div id="pdf-editor-notes" class="pdf-editor-notes" aria-label="Notas seleccionadas para corregir"></div>
+      <div class="pdf-editor-actions"><button type="button" id="pdf-save-pitch" class="btn small primary">Corregir y guardar</button><button type="button" id="pdf-reset-pitch" class="btn small subtle">Restablecer selección</button></div>
+      <p id="pdf-correct-status" class="pdf-small" role="status" aria-live="polite"></p>
+      <div class="pdf-mark-tools">
+       <p class="eyebrow pdf-manual-label">AÑADIR NOTAS</p>
+       <label class="pdf-toggle"><input type="checkbox" id="pdf-mark-mode"> Añadir nota pulsando su posición en el PDF</label>
+       <p class="pdf-small">Elige el sonido y la mano y pulsa en la cabeza de la nota sobre la partitura. Desactiva esta opción para volver a practicar.</p>
+       <label class="pdf-label" for="pdf-mark-pitch">Nombre y octava</label><input type="text" id="pdf-mark-pitch" value="Do4" placeholder="Ej.: Sol4, Sib3" autocomplete="off">
+       <label class="pdf-label" for="pdf-mark-hand">Mano</label><select id="pdf-mark-hand"><option value="0">Derecha</option><option value="1">Izquierda</option></select>
+       <p id="pdf-mark-status" class="pdf-small" aria-live="polite">Las nuevas notas se guardan en tu biblioteca local.</p>
+      </div>
+      <div id="pdf-detection-tools"><button type="button" class="btn small subtle pdf-detect-button" id="pdf-detect">Volver a detectar notas (beta)</button><p class="pdf-small" id="pdf-auto-status" role="status" aria-live="polite">La detección automática analiza PDF digitales compatibles.</p></div>
+     </details>
+    </aside>
+   </div>
+  </section>
+ </main>
+ <footer class="footer"><span>Clara · Entrenamiento progresivo de lectura para piano</span><span>Sin cuentas · Sin obligación de tempo · Datos locales</span></footer>
+</div>
+</body>
+</html>
